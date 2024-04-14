@@ -1,6 +1,6 @@
-# PSModuleTemplate
+# AST
 
-A PowerShell module template that can be used to create new modules.
+A PowerShell module for using the Abstract Syntax Tree (AST) to analyze any PowerShell code.
 
 ## Prerequisites
 
