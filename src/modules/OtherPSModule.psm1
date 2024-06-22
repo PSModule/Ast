@@ -1,4 +1,4 @@
-﻿Function Get-OtherPSModule {
+﻿function Get-OtherPSModule {
     <#
         .SYNOPSIS
         A brief description of the function
