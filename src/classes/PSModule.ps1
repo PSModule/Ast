@@ -1,4 +1,4 @@
-﻿Class PSModule {
+﻿class PSModule {
     $Name
     $Version
     $Functions

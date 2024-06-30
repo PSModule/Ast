@@ -1,4 +1,4 @@
-﻿Function Get-PSModuleTemplate {
+﻿function Get-PSModuleTemplate {
     <#
         .SYNOPSIS
         Performs tests on a module.
