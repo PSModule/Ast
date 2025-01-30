@@ -10,6 +10,10 @@
     #>
     [Alias('Test', 'TestFunc')]
     [Alias('Test-Func')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingCmdletAliases', '', Scope = 'Function',
+        Justification = 'This is a test :)'
+    )]
     [CmdletBinding()]
     param (
         # Name of the person to greet.
