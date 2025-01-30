@@ -42,3 +42,15 @@ Describe 'Functions' {
         }
     }
 }
+
+Describe "Scripts" {
+    Context "Function: 'Get-ScriptCommands'" {
+        It 'Get-ScriptCommands gets the script commands' {
+            $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
+            $commands = Get-ScriptCommands -Path $path
+            $commands | Should -Not -BeNullOrEmpty
+            $commands | Should -BeOfType [pscustomobject]
+            $commands.Name | Should -Contain 'Test-Path', 'Where-Object', 'ForEach-Object'
+        }
+    }
+}
