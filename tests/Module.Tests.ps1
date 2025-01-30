@@ -54,7 +54,8 @@ Describe 'Scripts' {
             $commands.Name | Should -Contain 'Get-Process'
             $commands.Name | Should -Contain 'Import-Module'
             $commands.Name | Should -Contain 'Register-ArgumentCompleter'
-            $commands.Name | Should -Not -Contain '.', '&'
+            $commands.Name | Should -Not -Contain '.'
+            $commands.Name | Should -Contain '&'
         }
         It 'Get-ScriptCommands gets the script commands with call operators' {
             $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
@@ -65,7 +66,8 @@ Describe 'Scripts' {
             $commands.Name | Should -Contain 'Get-Process'
             $commands.Name | Should -Contain 'Import-Module'
             $commands.Name | Should -Contain 'Register-ArgumentCompleter'
-            $commands.Name | Should -Contain '.', '&'
+            $commands.Name | Should -Contain '.'
+            $commands.Name | Should -Contain '&'
         }
     }
 }
