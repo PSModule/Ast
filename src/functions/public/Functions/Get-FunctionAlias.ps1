@@ -25,11 +25,12 @@
 
         # The path to the PowerShell script file to be parsed.
         [Parameter(Mandatory)]
+        [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
         [string] $Path
     )
 
     # Extract function definitions
-    $functions = Get-FunctionAst -Path $Path
+    $functions = Get-FunctionAST -Path $Path
 
     # Process each function and extract aliases
     $functions | ForEach-Object {

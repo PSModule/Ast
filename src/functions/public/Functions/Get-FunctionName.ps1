@@ -21,6 +21,7 @@
     param (
         # The path to the script file to parse
         [Parameter(Mandatory)]
+        [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
         [string] $Path
     )
 

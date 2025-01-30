@@ -25,6 +25,7 @@
 
         # The path to the PowerShell script file to be parsed.
         [Parameter(Mandatory)]
+        [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
         [string] $Path
     )
 

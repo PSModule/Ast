@@ -21,9 +21,6 @@
         Get-ScriptAST -Path "C:\Scripts\MyScript.ps1" -Tokens ([ref]$tokens) -Errors ([ref]$errors)
 
         Parses the script file while also capturing tokens and errors.
-
-        .NOTES
-        The function supports both file-based and inline script parsing.
     #>
     [outputType([System.Management.Automation.Language.ScriptBlockAst])]
     [CmdletBinding()]
