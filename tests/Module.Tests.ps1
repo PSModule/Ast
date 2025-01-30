@@ -50,7 +50,14 @@ Describe "Scripts" {
             $commands = Get-ScriptCommand -Path $path
             $commands | Should -Not -BeNullOrEmpty
             $commands | Should -BeOfType [pscustomobject]
-            $commands.Name | Should -Contain 'Test-Path', 'Where-Object', 'ForEach-Object'
+            $commands.Name | Should -Contain 'Write-Output', 'Get-Alias'
+        }
+        It 'Get-ScriptCommands gets the script commands with call operators' {
+            $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
+            $commands = Get-ScriptCommand -Path $path -IncludeCallOperators
+            $commands | Should -Not -BeNullOrEmpty
+            $commands | Should -BeOfType [pscustomobject]
+            $commands.Name | Should -Contain 'Write-Output', 'Get-Alias', 'ipmo', '.'
         }
     }
 }

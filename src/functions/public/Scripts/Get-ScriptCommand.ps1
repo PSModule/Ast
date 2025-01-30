@@ -42,9 +42,13 @@
     }
 
     $commandAST | ForEach-Object {
+        $invocationOperator = switch ($_.InvocationOperator) {
+            'Ampersand' { '&' }
+            'Dot' { '.' }
+        }
         $_.CommandElements[0].Extent | ForEach-Object {
             [pscustomobject]@{
-                Name              = $_.Text
+                Name              = [string]::IsNullOrEmpty($invocationOperator) ? $_.Text : $invocationOperator
                 StartLineNumber   = $_.StartLineNumber
                 StartColumnNumber = $_.StartColumnNumber
                 EndLineNumber     = $_.EndLineNumber
