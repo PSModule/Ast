@@ -3,7 +3,7 @@
         It 'Get-FunctionName gets the function name' {
             $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
             $functionName = Get-FunctionName -Path $path
-            $functionName | Should -Be 'Get-FunctionName'
+            $functionName | Should -Be 'Test-Function'
         }
     }
     Context "Function: 'Get-FunctionAlias'" {
