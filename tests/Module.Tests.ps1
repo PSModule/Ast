@@ -22,7 +22,7 @@ Describe 'Functions' {
         It 'Get-FunctionAlias gets the function alias' {
             $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
             $functionType = Get-FunctionType -Path $path
-            $functionType | Should -Be 'Function'
+            $functionType.Type | Should -Be 'Function'
         }
     }
     Context "Function: 'Get-FunctionName'" {
