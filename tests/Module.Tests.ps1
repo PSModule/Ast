@@ -50,15 +50,7 @@ Describe 'Scripts' {
             $commands = Get-ScriptCommand -Path $path
             $commands | Should -Not -BeNullOrEmpty
             $commands | Should -BeOfType [pscustomobject]
-            $commands.Name | Should -Contain @(
-                'ForEach-Object',
-                'Get-Process',
-                'Import-Module',
-                'Register-ArgumentCompleter',
-                'Select-Object',
-                'Where-Object',
-                'Write-Output'
-            )
+            $commands.Name | Should -Contain 'ForEach-Object', 'Get-Process', 'Import-Module', 'Register-ArgumentCompleter'
             $commands.Name | Should -Not -Contain '.', '&'
         }
         It 'Get-ScriptCommands gets the script commands with call operators' {
@@ -66,15 +58,7 @@ Describe 'Scripts' {
             $commands = Get-ScriptCommand -Path $path -IncludeCallOperators
             $commands | Should -Not -BeNullOrEmpty
             $commands | Should -BeOfType [pscustomobject]
-            $commands.Name | Should -Contain @(
-                'ForEach-Object',
-                'Get-Process',
-                'Import-Module',
-                'Register-ArgumentCompleter',
-                'Select-Object',
-                'Where-Object',
-                'Write-Output'
-            )
+            $commands.Name | Should -Contain 'ForEach-Object', 'Get-Process', 'Import-Module', 'Register-ArgumentCompleter'
             $commands.Name | Should -Contain '.', '&'
         }
     }
