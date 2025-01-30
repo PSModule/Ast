@@ -8,7 +8,8 @@
 
         "Hello, World!"
     #>
-    [Alias('Test')]
+    [Alias('Test', 'TestFunc')]
+    [Alias('Test-Func')]
     [CmdletBinding()]
     param (
         # Name of the person to greet.

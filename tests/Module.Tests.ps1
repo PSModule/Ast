@@ -10,7 +10,9 @@
         It 'Get-FunctionAlias gets the function alias' {
             $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
             $functionAlias = Get-FunctionAlias -Path $path
-            $functionAlias | Should -Be 'Test'
+            $functionAlias.Alias | Should -Contain 'Test'
+            $functionAlias.Alias | Should -Contain 'TestFunc'
+            $functionAlias.Alias | Should -Contain 'Test-Func'
         }
     }
 }
