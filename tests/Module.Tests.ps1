@@ -42,3 +42,32 @@ Describe 'Functions' {
         }
     }
 }
+
+Describe 'Scripts' {
+    Context "Function: 'Get-ScriptCommands'" {
+        It 'Get-ScriptCommands gets the script commands' {
+            $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
+            $commands = Get-ScriptCommand -Path $path
+            $commands | Should -Not -BeNullOrEmpty
+            $commands | Should -BeOfType [pscustomobject]
+            $commands.Name | Should -Contain 'ForEach-Object'
+            $commands.Name | Should -Contain 'Get-Process'
+            $commands.Name | Should -Contain 'ipmo'
+            $commands.Name | Should -Contain 'Register-ArgumentCompleter'
+            $commands.Name | Should -Not -Contain '.'
+            $commands.Name | Should -Not -Contain '&'
+        }
+        It 'Get-ScriptCommands gets the script commands with call operators' {
+            $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
+            $commands = Get-ScriptCommand -Path $path -IncludeCallOperators
+            $commands | Should -Not -BeNullOrEmpty
+            $commands | Should -BeOfType [pscustomobject]
+            $commands.Name | Should -Contain 'ForEach-Object'
+            $commands.Name | Should -Contain 'Get-Process'
+            $commands.Name | Should -Contain 'ipmo'
+            $commands.Name | Should -Contain 'Register-ArgumentCompleter'
+            $commands.Name | Should -Contain '.'
+            $commands.Name | Should -Contain '&'
+        }
+    }
+}
