@@ -52,7 +52,7 @@ Describe 'Scripts' {
             $commands | Should -BeOfType [pscustomobject]
             $commands.Name | Should -Contain 'ForEach-Object'
             $commands.Name | Should -Contain 'Get-Process'
-            $commands.Name | Should -Contain 'Import-Module'
+            $commands.Name | Should -Contain 'ipmo'
             $commands.Name | Should -Contain 'Register-ArgumentCompleter'
             $commands.Name | Should -Not -Contain '.'
             $commands.Name | Should -Contain '&'
@@ -64,7 +64,7 @@ Describe 'Scripts' {
             $commands | Should -BeOfType [pscustomobject]
             $commands.Name | Should -Contain 'ForEach-Object'
             $commands.Name | Should -Contain 'Get-Process'
-            $commands.Name | Should -Contain 'Import-Module'
+            $commands.Name | Should -Contain 'ipmo'
             $commands.Name | Should -Contain 'Register-ArgumentCompleter'
             $commands.Name | Should -Contain '.'
             $commands.Name | Should -Contain '&'
