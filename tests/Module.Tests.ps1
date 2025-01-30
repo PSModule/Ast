@@ -55,7 +55,7 @@ Describe 'Scripts' {
             $commands.Name | Should -Contain 'ipmo'
             $commands.Name | Should -Contain 'Register-ArgumentCompleter'
             $commands.Name | Should -Not -Contain '.'
-            $commands.Name | Should -Contain '&'
+            $commands.Name | Should -Not -Contain '&'
         }
         It 'Get-ScriptCommands gets the script commands with call operators' {
             $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
