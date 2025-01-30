@@ -1,13 +1,14 @@
-﻿function Test-PSModuleTemplate {
+﻿function Test-Function {
     <#
         .SYNOPSIS
         Performs tests on a module.
 
         .EXAMPLE
-        Test-PSModuleTemplate -Name 'World'
+        Test-Function -Name 'World'
 
         "Hello, World!"
     #>
+    [Alias('Test')]
     [CmdletBinding()]
     param (
         # Name of the person to greet.

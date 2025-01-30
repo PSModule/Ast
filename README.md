@@ -1,6 +1,6 @@
 # AST
 
-A PowerShell module for using the Abstract Syntax Tree (AST) to analyze any PowerShell code.
+A PowerShell module for using the Abstract Syntax Tree (AST) on any PowerShell code.
 
 ## Prerequisites
 
@@ -12,29 +12,21 @@ This uses the following external resources:
 To install the module from the PowerShell Gallery, you can use the following command:
 
 ```powershell
-Install-PSResource -Name YourModuleName
-Import-Module -Name YourModuleName
+Install-PSResource -Name AST
+Import-Module -Name AST
 ```
 
 ## Usage
 
 Here is a list of example that are typical use cases for the module.
 
-### Example 1: Greet an entity
+### Example 1: Get the function name from a script
 
-Provide examples for typical commands that a user would like to do with the module.
-
-```powershell
-Greet-Entity -Name 'World'
-Hello, World!
-```
-
-### Example 2
-
-Provide examples for typical commands that a user would like to do with the module.
+This example shows how to get the function name from a script.
 
 ```powershell
-Import-Module -Name PSModuleTemplate
+Get-FunctionName -Path 'Test-Me.ps1'
+Test-Me
 ```
 
 ### Find more examples
@@ -43,11 +35,6 @@ To find more examples of how to use the module, please refer to the [examples](e
 
 Alternatively, you can use the Get-Command -Module 'This module' to find more commands that are available in the module.
 To find examples of each of the commands you can use Get-Help -Examples 'CommandName'.
-
-## Documentation
-
-Link to further documentation if available, or describe where in the repository users can find more detailed documentation about
-the module's functions and features.
 
 ## Contributing
 
@@ -64,6 +51,6 @@ Please see the issues tab on this project and submit a new issue that matches yo
 If you do code, we'd love to have your contributions. Please read the [Contribution guidelines](CONTRIBUTING.md) for more information.
 You can either help by picking up an existing issue or submit a new one if you have an idea for a new feature or improvement.
 
-## Acknowledgements
+## Tools
 
-Here is a list of people and projects that helped this project in some way.
+- [lzybkr/ShowPSAst](https://github.com/lzybkr/ShowPSAst)
