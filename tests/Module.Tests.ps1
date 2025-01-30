@@ -17,8 +17,7 @@
     }
 }
 
-
-Descripbe 'Functions' {
+Describe 'Functions' {
     Context "Function: 'Get-FunctionType'" {
         It 'Get-FunctionAlias gets the function alias' {
             $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
