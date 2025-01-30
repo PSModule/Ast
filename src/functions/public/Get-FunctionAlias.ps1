@@ -1,9 +1,30 @@
 ﻿function Get-FunctionAlias {
+    <#
+        .SYNOPSIS
+        Retrieves function aliases from a PowerShell script file.
+
+        .DESCRIPTION
+        Parses a specified PowerShell script file to identify function definitions and extract their associated aliases.
+        Returns a custom object containing function names and their corresponding aliases.
+
+        .EXAMPLE
+        Get-FunctionAlias -Path "C:\Scripts\MyScript.ps1"
+
+        Retrieves all function aliases defined in the specified script file.
+
+        .EXAMPLE
+        Get-FunctionAlias -Name "Get-Data" -Path "C:\Scripts\MyScript.ps1"
+
+        Retrieves the alias information for the function named "Get-Data" from the specified script file.
+    #>
+    [CmdletBinding()]
     param (
-        # The name of the function to retrieve aliases for
+        # The name of the function to search for. Defaults to all functions ('*').
+        [Parameter()]
         [string] $Name = '*',
 
-        # The path to the script file to parse
+        # The path to the PowerShell script file to be parsed.
+        [Parameter(Mandatory)]
         [string] $Path
     )
 
