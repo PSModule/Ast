@@ -36,12 +36,12 @@
             Mandatory,
             ValueFromPipeline
         )]
-        [string] $Test
+        [string] $Line
     )
 
     # Parse the single line using AST
     $tokens = $null
-    $null = [System.Management.Automation.Language.Parser]::ParseInput($Test, [ref]$tokens, [ref]$null)
+    $null = [System.Management.Automation.Language.Parser]::ParseInput($Line, [ref]$tokens, [ref]$null)
 
     # Find comment tokens in the line
     $commentToken = $tokens | Where-Object { $_.Kind -eq 'Comment' }
@@ -50,9 +50,9 @@
         $commentStart = $commentToken.Extent.StartColumnNumber - 1  # Convert to zero-based index
 
         # Remove the comment by trimming the line up to the comment start position
-        return $Test.Substring(0, $commentStart)
+        return $Line.Substring(0, $commentStart)
     }
 
     # Return original line if no comment was found
-    return $Test
+    return $Line
 }
