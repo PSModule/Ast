@@ -43,6 +43,30 @@ Describe 'Functions' {
     }
 }
 
+Describe 'Line' {
+    Context 'Function: Remove-LineComment' {
+        It 'Remove-LineComment removes the line comment' {
+            $line = '# This is a comment'
+            $line = Remove-LineComment -Line $line
+            $line | Should -BeNullOrEmpty
+        }
+        It 'Remove-LineComment removes the line comment with leading whitespace' {
+            $line = '    # This is a comment'
+            $line = Remove-LineComment -Line $line
+            $line | Should -Be '    '
+        }
+        It 'Remove-LineComment removes the line comment with leading and trailing whitespace' {
+            $line = '    Get-Command # This is a comment    '
+            $line = Remove-LineComment -Line $line
+            $line | Should -Be '    Get-Command '
+        }
+        It 'Remove-LineComment returns the same line when no comment is present' {
+            $line = 'Get-Command'
+            $line | Remove-LineComment | Should -Be $line
+        }
+    }
+}
+
 Describe 'Scripts' {
     Context "Function: 'Get-ScriptCommands'" {
         It 'Get-ScriptCommands gets the script commands' {
