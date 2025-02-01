@@ -44,25 +44,25 @@ Describe 'Functions' {
 }
 
 Describe 'Line' {
-    Context 'Function: Remove-LineComment' {
-        It 'Remove-LineComment removes the line comment' {
+    Context 'Function: Get-LineComment' {
+        It 'Get-LineComment gets the line comment' {
             $line = '# This is a comment'
-            $line = Remove-LineComment -Line $line
-            $line | Should -BeNullOrEmpty
+            $line = Get-LineComment -Line $line
+            $line | Should '# This is a comment'
         }
-        It 'Remove-LineComment removes the line comment with leading whitespace' {
+        It 'Get-LineComment gets the line comment without leading whitespace' {
             $line = '    # This is a comment'
-            $line = Remove-LineComment -Line $line
-            $line | Should -Be '    '
+            $line = Get-LineComment -Line $line
+            $line | Should -Be '# This is a comment'
         }
-        It 'Remove-LineComment removes the line comment with leading and trailing whitespace' {
+        It 'Get-LineComment gets the line comment but not the command' {
             $line = '    Get-Command # This is a comment    '
-            $line = Remove-LineComment -Line $line
-            $line | Should -Be '    Get-Command '
+            $line = Get-LineComment -Line $line
+            $line | Should -Be '# This is a comment    '
         }
-        It 'Remove-LineComment returns the same line when no comment is present' {
+        It 'Get-LineComment returns nothing when no comment is present' {
             $line = 'Get-Command'
-            $line | Remove-LineComment | Should -Be $line
+            $line | Get-LineComment | Should -BeNullOrEmpty
         }
     }
 }
