@@ -43,6 +43,30 @@ Describe 'Functions' {
     }
 }
 
+Describe 'Line' {
+    Context 'Function: Get-LineComment' {
+        It 'Get-LineComment gets the line comment' {
+            $line = '# This is a comment'
+            $line = Get-LineComment -Line $line
+            $line | Should -Be '# This is a comment'
+        }
+        It 'Get-LineComment gets the line comment without leading whitespace' {
+            $line = '    # This is a comment'
+            $line = Get-LineComment -Line $line
+            $line | Should -Be '# This is a comment'
+        }
+        It 'Get-LineComment gets the line comment but not the command' {
+            $line = '    Get-Command # This is a comment    '
+            $line = Get-LineComment -Line $line
+            $line | Should -Be '# This is a comment    '
+        }
+        It 'Get-LineComment returns nothing when no comment is present' {
+            $line = 'Get-Command'
+            $line | Get-LineComment | Should -BeNullOrEmpty
+        }
+    }
+}
+
 Describe 'Scripts' {
     Context "Function: 'Get-ScriptCommands'" {
         It 'Get-ScriptCommands gets the script commands' {

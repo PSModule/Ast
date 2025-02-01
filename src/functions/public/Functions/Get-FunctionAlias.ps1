@@ -16,6 +16,9 @@
         Get-FunctionAlias -Name "Get-Data" -Path "C:\Scripts\MyScript.ps1"
 
         Retrieves the alias information for the function named "Get-Data" from the specified script file.
+
+        .LINK
+        https://psmodule.io/AST/Functions/Functions/Get-FunctionAlias/
     #>
     [CmdletBinding()]
     param (

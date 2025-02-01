@@ -15,6 +15,9 @@
 
         .NOTES
         Uses PowerShell's AST to analyze script structure.
+
+        .LINK
+        https://psmodule.io/AST/Functions/Functions/Get-FunctionName/
     #>
 
     [CmdletBinding()]

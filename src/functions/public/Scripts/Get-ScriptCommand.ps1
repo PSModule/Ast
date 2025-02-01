@@ -17,6 +17,9 @@
         Get-ScriptCommand -Path "C:\Scripts\example.ps1" -IncludeCallOperators
 
         Extracts all commands, including those executed with call operators (& and .).
+
+        .LINK
+        https://psmodule.io/AST/Functions/Scripts/Get-ScriptCommand/
     #>
     [Alias('Get-ScriptCommands')]
     [CmdletBinding()]
