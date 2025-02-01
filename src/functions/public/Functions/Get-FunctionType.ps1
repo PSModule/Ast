@@ -12,6 +12,9 @@
         Get-FunctionType -Path "C:\Scripts\MyScript.ps1"
 
         Retrieves all function types defined in the specified script file.
+
+        .LINK
+        https://psmodule.io/AST/Functions/Functions/Get-FunctionType/
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]

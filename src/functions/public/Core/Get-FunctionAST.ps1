@@ -16,6 +16,9 @@
         Get-FunctionAST -Name "Get-Data" -Path "C:\Scripts\MyScript.ps1"
 
         Retrieves only the function definition named "Get-Data" from "MyScript.ps1".
+
+        .LINK
+        https://psmodule.io/AST/Functions/Core/Get-FunctionAST/
     #>
     [CmdletBinding()]
     param (

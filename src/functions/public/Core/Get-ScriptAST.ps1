@@ -21,6 +21,9 @@
         Get-ScriptAST -Path "C:\Scripts\MyScript.ps1" -Tokens ([ref]$tokens) -Errors ([ref]$errors)
 
         Parses the script file while also capturing tokens and errors.
+
+        .LINK
+        https://psmodule.io/AST/Functions/Core/Get-ScriptAST/
     #>
     [outputType([System.Management.Automation.Language.ScriptBlockAst])]
     [CmdletBinding()]

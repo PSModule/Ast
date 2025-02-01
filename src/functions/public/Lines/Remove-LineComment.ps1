@@ -20,6 +20,9 @@
         Returns: 'Write-Host "Hello World"'
 
         If no comment is present, the original line is returned unchanged.
+
+        .LINK
+        https://psmodule.io/AST/Functions/Lines/Remove-LineComment/
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSUseShouldProcessForStateChangingFunctions', '',
