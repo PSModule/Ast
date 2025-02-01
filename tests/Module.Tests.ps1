@@ -48,7 +48,7 @@ Describe 'Line' {
         It 'Get-LineComment gets the line comment' {
             $line = '# This is a comment'
             $line = Get-LineComment -Line $line
-            $line | Should '# This is a comment'
+            $line | Should -Be '# This is a comment'
         }
         It 'Get-LineComment gets the line comment without leading whitespace' {
             $line = '    # This is a comment'
