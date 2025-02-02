@@ -1,19 +1,16 @@
-﻿<#
-  .SYNOPSIS
-    This is a general example of how to use the module.
-#>
+﻿# Gets the AST of a script. Can be any type of PowerShell script file.
+Get-ScriptAST -Path $path
 
-# Import the module
-Import-Module -Name 'PSModule'
+# Gets the AST of a function(s) in a script. Can be any type of PowerShell script file.
+Get-FunctionAST -Path $path
 
-# Define the path to the font file
-$FontFilePath = 'C:\Fonts\CodeNewRoman\CodeNewRomanNerdFontPropo-Regular.tff'
+# Gets the type of all functions in a script file. Function or filter.
+Get-FunctionType -Path $path
 
-# Install the font
-Install-Font -Path $FontFilePath -Verbose
+# Gets the name of all functions in a script file.
+Get-FunctionName -Path $path
 
-# List installed fonts
-Get-Font -Name 'CodeNewRomanNerdFontPropo-Regular'
+# Gets the alias of a function in a script, that uses Alias attribute.
+Get-FunctionAlias -Path $path
 
-# Uninstall the font
-Get-Font -Name 'CodeNewRomanNerdFontPropo-Regular' | Uninstall-Font -Verbose
+'Get-ChildItem -Path . # This is a comment' | Get-LineComment
