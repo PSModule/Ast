@@ -1,4 +1,4 @@
-﻿function Get-ScriptCommand {
+﻿function Get-ASTScriptCommand {
     <#
         .SYNOPSIS
         Retrieves the commands used within a specified PowerShell script.
@@ -9,19 +9,18 @@
         Returns details such as command name, position, and file reference.
 
         .EXAMPLE
-        Get-ScriptCommand -Path "C:\Scripts\example.ps1"
+        Get-ASTScriptCommand -Path "C:\Scripts\example.ps1"
 
         Extracts and lists all commands found in the specified PowerShell script.
 
         .EXAMPLE
-        Get-ScriptCommand -Path "C:\Scripts\example.ps1" -IncludeCallOperators
+        Get-ASTScriptCommand -Path "C:\Scripts\example.ps1" -IncludeCallOperators
 
         Extracts all commands, including those executed with call operators (& and .).
 
         .LINK
-        https://psmodule.io/AST/Functions/Scripts/Get-ScriptCommand/
+        https://psmodule.io/AST/Functions/Scripts/Get-ASTScriptCommand/
     #>
-    [Alias('Get-ScriptCommands')]
     [CmdletBinding()]
     param (
         # The path to the PowerShell script file to be parsed.
