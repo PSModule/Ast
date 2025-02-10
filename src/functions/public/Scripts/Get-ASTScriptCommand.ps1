@@ -34,7 +34,7 @@
     )
 
     # Extract function definitions
-    $ast = Get-ScriptAST -Path $Path
+    $ast = Get-ASTScript -Path $Path
 
     # Gather CommandAsts
     $commandAST = $ast.FindAll({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $true)

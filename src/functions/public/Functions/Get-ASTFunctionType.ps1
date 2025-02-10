@@ -1,42 +1,61 @@
 ﻿function Get-FunctionType {
     <#
-        .SYNOPSIS
-        Extracts function types from a specified PowerShell script.
 
-        .DESCRIPTION
-        Parses the given PowerShell script file and retrieves all function types
-        defined within it. This function utilizes the PowerShell Abstract Syntax Tree (AST)
-        to analyze the script and extract function definitions.
-
-        .EXAMPLE
-        Get-FunctionType -Path "C:\Scripts\MyScript.ps1"
-
-        Retrieves all function types defined in the specified script file.
-
-        .LINK
-        https://psmodule.io/AST/Functions/Functions/Get-FunctionType/
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
     param(
+        # The name of the command to search for. Defaults to all commands ('*').
+        [Parameter()]
+        [string] $Name = '*',
+
         # The path to the PowerShell script file to be parsed.
+        # Validate using Test-Path
         [Parameter(
             Mandatory,
             ValueFromPipeline,
             ValueFromPipelineByPropertyName,
             ParameterSetName = 'Path'
         )]
-        [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
-        [string] $Path
+        [ValidateScript({ Test-Path -Path $_ })]
+        [string] $Path,
+
+        # The PowerShell script to be parsed.
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Script'
+        )]
+        [string] $Script,
+
+        # Search nested functions and script block expressions.
+        [Parameter()]
+        [switch] $Recurse
     )
 
     begin {}
 
     process {
-        $functionAST = Get-FunctionAST -Path $Path
+        switch ($PSCmdlet.ParameterSetName) {
+            'Path' {
+                $functionAST = Get-ASTFunction -Name $Name -Path $Path -Recurse:$Recurse
+            }
+            'Script' {
+                $functionAST = Get-ASTFunction -Name $Name -Script $Script -Recurse:$Recurse
+            }
+        }
 
         $functionAST | ForEach-Object {
-            $type = $_.IsFilter ? 'Filter' : $_.IsWorkflow ? 'Workflow' : $_.IsConfiguration ? 'Configuration' : 'Function'
+            $type = if ($_.IsWorkflow) {
+                'Workflow'
+            } elseif ($_.IsConfiguration) {
+                'Configuration'
+            } elseif ($_.IsFilter) {
+                'Filter'
+            } else {
+                'Function'
+            }
             [pscustomobject]@{
                 Name = $_.Name
                 Type = $type

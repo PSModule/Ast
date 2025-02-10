@@ -1,8 +1,8 @@
 ﻿#Requires -Modules @{ ModuleName = 'Pester'; RequiredVersion = '5.7.1' }
 
 Describe 'Core' {
-    Context "Function: 'Get-ScriptAST'" {
-        It 'Get-ScriptAST gets the script AST' {
+    Context "Function: 'Get-ASTScript'" {
+        It 'Get-ASTScript gets the script AST' {
             $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
             $ast = Get-ASTScript -Path $path
             $ast | Should -Not -BeNullOrEmpty

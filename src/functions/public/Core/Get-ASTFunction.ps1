@@ -1,46 +1,74 @@
-﻿function Get-FunctionAST {
+﻿function Get-AstFunction {
     <#
-        .SYNOPSIS
-        Retrieves the abstract syntax tree (AST) of function definitions from a PowerShell script.
 
-        .DESCRIPTION
-        Parses a specified PowerShell script file and extracts function definitions matching the given name.
-        By default, it returns all function definitions if no specific name is provided.
-
-        .EXAMPLE
-        Get-FunctionAST -Path "C:\Scripts\MyScript.ps1"
-
-        Retrieves all function definitions from "MyScript.ps1".
-
-        .EXAMPLE
-        Get-FunctionAST -Name "Get-Data" -Path "C:\Scripts\MyScript.ps1"
-
-        Retrieves only the function definition named "Get-Data" from "MyScript.ps1".
-
-        .LINK
-        https://psmodule.io/AST/Functions/Core/Get-FunctionAST/
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Ast')]
     param (
         # The name of the function to search for. Defaults to all functions ('*').
         [Parameter()]
         [string] $Name = '*',
 
         # The path to the PowerShell script file to be parsed.
-        [Parameter(Mandatory)]
-        [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
-        [string] $Path
+        # Validate using Test-Path
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Path'
+        )]
+        [string] $Path,
+
+        # The PowerShell script to be parsed.
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Script'
+        )]
+        [string] $Script,
+
+        # An existing AST object to search.
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Ast'
+        )]
+        [System.Management.Automation.Language.Ast] $Ast,
+
+        # Search nested functions and script block expressions.
+        [Parameter()]
+        [switch] $Recurse
     )
 
     begin {}
 
     process {
-        # Parse the script file into an AST
-        $ast = Get-ScriptAST -Path $Path
+        $scriptAst = @()
+        switch ($PSCmdlet.ParameterSetName) {
+            'Path' {
+                $scriptAst += (Get-AstScript -Path $Path).Ast
+            }
+            'Script' {
+                $scriptAst += (Get-AstScript -Script $Script).Ast
+            }
+            'Ast' {
+                $scriptAst += $Ast
+            }
+        }
 
         # Extract function definitions
-        $ast.FindAll({ $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $true) | Where-Object { $_.Name -like $Name }
+        $ast = foreach ($astItem in $scriptAst) {
+            $astItem.FindAll({ $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $Recurse) |
+                Where-Object { $_.Name -like $Name }
+        }
     }
 
-    end {}
+    end {
+        [pscustomobject]@{
+            Ast    = @($ast)
+            Tokens = $scriptAst.tokens
+            Errors = $scriptAst.errors
+        }
+    }
 }

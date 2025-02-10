@@ -1,38 +1,56 @@
 ﻿function Get-FunctionName {
     <#
-        .SYNOPSIS
-        Extracts function names from a specified PowerShell script.
 
-        .DESCRIPTION
-        Parses the given PowerShell script file and retrieves all function names
-        defined within it. This function utilizes the PowerShell Abstract Syntax Tree (AST)
-        to analyze the script and extract function definitions.
-
-        .EXAMPLE
-        Get-FunctionName -Path "C:\Scripts\MyScript.ps1"
-
-        Retrieves all function names defined in the specified script file.
-
-        .NOTES
-        Uses PowerShell's AST to analyze script structure.
-
-        .LINK
-        https://psmodule.io/AST/Functions/Functions/Get-FunctionName/
     #>
 
     [CmdletBinding()]
     param (
-        # The path to the script file to parse
-        [Parameter(Mandatory)]
-        [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
-        [string] $Path
+        # The name of the command to search for. Defaults to all commands ('*').
+        [Parameter()]
+        [string] $Name = '*',
+
+        # The path to the PowerShell script file to be parsed.
+        # Validate using Test-Path
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Path'
+        )]
+        [ValidateScript({ Test-Path -Path $_ })]
+        [string] $Path,
+
+        # The PowerShell script to be parsed.
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Script'
+        )]
+        [string] $Script,
+
+        # Search nested functions and script block expressions.
+        [Parameter()]
+        [switch] $Recurse
     )
 
-    # Extract function definitions
-    $functions = Get-FunctionAST -Path $Path
+    begin {}
 
-    # Process each function and extract the name
-    $functions | ForEach-Object {
-        $_.Name
+    process {
+        switch ($PSCmdlet.ParameterSetName) {
+            'Path' {
+                $functionAST = Get-ASTFunction -Name $Name -Path $Path -Recurse:$Recurse
+            }
+            'Script' {
+                $functionAST = Get-ASTFunction -Name $Name -Script $Script -Recurse:$Recurse
+            }
+        }
+
+        # Process each function and extract the name
+        $functionAST | ForEach-Object {
+            $_.Name
+        }
     }
+
+    end {}
 }

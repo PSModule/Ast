@@ -1,56 +1,69 @@
 ﻿function Get-ASTFunctionAlias {
     <#
-        .SYNOPSIS
-        Retrieves function aliases from a PowerShell script file.
 
-        .DESCRIPTION
-        Parses a specified PowerShell script file to identify function definitions and extract their associated aliases.
-        Returns a custom object containing function names and their corresponding aliases.
-
-        .EXAMPLE
-        Get-ASTFunctionAlias -Path "C:\Scripts\MyScript.ps1"
-
-        Retrieves all function aliases defined in the specified script file.
-
-        .EXAMPLE
-        Get-ASTFunctionAlias -Name "Get-Data" -Path "C:\Scripts\MyScript.ps1"
-
-        Retrieves the alias information for the function named "Get-Data" from the specified script file.
-
-        .LINK
-        https://psmodule.io/AST/Functions/Functions/Get-ASTFunctionAlias/
     #>
     [CmdletBinding()]
     param (
-        # The name of the function to search for. Defaults to all functions ('*').
+        # The name of the command to search for. Defaults to all commands ('*').
         [Parameter()]
         [string] $Name = '*',
 
         # The path to the PowerShell script file to be parsed.
-        [Parameter(Mandatory)]
-        [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
-        [string] $Path
+        # Validate using Test-Path
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Path'
+        )]
+        [ValidateScript({ Test-Path -Path $_ })]
+        [string] $Path,
+
+        # The PowerShell script to be parsed.
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Script'
+        )]
+        [string] $Script,
+
+        # Search nested functions and script block expressions.
+        [Parameter()]
+        [switch] $Recurse
     )
 
-    # Extract function definitions
-    $functions = Get-FunctionAST -Path $Path
+    begin {}
 
-    # Process each function and extract aliases
-    $functions | ForEach-Object {
-        $funcName = $_.Name
-        $funcAttributes = $_.Body.FindAll({ $args[0] -is [System.Management.Automation.Language.AttributeAst] }, $true)
-
-        # Filter only function-level alias attributes
-        $aliasAttr = $funcAttributes | Where-Object {
-            $_.TypeName.Name -eq 'Alias' -and $_.Parent -is [System.Management.Automation.Language.FunctionDefinitionAst]
-        }
-
-        if ($aliasAttr) {
-            $aliases = $aliasAttr.PositionalArguments | ForEach-Object { $_.ToString().Trim('"', "'") }
-            [PSCustomObject]@{
-                Name  = $funcName
-                Alias = $aliases
+    process {
+        switch ($PSCmdlet.ParameterSetName) {
+            'Path' {
+                $functionAST = Get-ASTFunction -Name $Name -Path $Path -Recurse:$Recurse
+            }
+            'Script' {
+                $functionAST = Get-ASTFunction -Name $Name -Script $Script -Recurse:$Recurse
             }
         }
-    } | Where-Object { $_.Name -like $Name }
+
+        # Process each function and extract aliases
+        $functionAST | ForEach-Object {
+            $funcName = $_.Name
+            $funcAttributes = $_.Body.FindAll({ $args[0] -is [System.Management.Automation.Language.AttributeAst] }, $true)
+
+            # Filter only function-level alias attributes
+            $aliasAttr = $funcAttributes | Where-Object {
+                $_.TypeName.Name -eq 'Alias' -and $_.Parent -is [System.Management.Automation.Language.FunctionDefinitionAst]
+            }
+
+            if ($aliasAttr) {
+                $aliases = $aliasAttr.PositionalArguments | ForEach-Object { $_.ToString().Trim('"', "'") }
+                [PSCustomObject]@{
+                    Name  = $funcName
+                    Alias = $aliases
+                }
+            }
+        } | Where-Object { $_.Name -like $Name }
+    }
+
+    end {}
 }
