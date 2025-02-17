@@ -42,7 +42,7 @@
         - `Errors` - [System.Management.Automation.Language.ParseError[]]. Any parsing errors encountered.
 
         .LINK
-        https://psmodule.io/Ast/Functions/Get-AstScript/
+        https://psmodule.io/Ast/Functions/Core/Get-AstScript/
     #>
     [outputType([System.Management.Automation.Language.ScriptBlockAst])]
     [CmdletBinding()]

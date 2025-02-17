@@ -52,7 +52,7 @@
         Contains AST objects, tokenized script content, and parsing errors if any.
 
         .LINK
-        https://psmodule.io/Ast/Functions/Get-AstFunction
+        https://psmodule.io/Ast/Functions/Core/Get-AstFunction
     #>
     [CmdletBinding(DefaultParameterSetName = 'Ast')]
     param (
