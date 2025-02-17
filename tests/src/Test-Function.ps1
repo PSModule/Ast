@@ -11,7 +11,7 @@
     [Alias('Test', 'TestFunc')]
     [Alias('Test-Func')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSAvoidUsingCmdletAliases', '', Scope = 'Function',
+        'PSAvoidUsingWriteHost', # Keeping this disabled as it seems like an old issue. '', Scope = 'Function',
         Justification = 'This is a test :)'
     )]
     [CmdletBinding()]
