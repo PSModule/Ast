@@ -34,10 +34,10 @@
     )
 
     # Extract function definitions
-    $ast = Get-ASTScript -Path $Path
+    $script = Get-ASTScript -Path $Path
 
     # Gather CommandAsts
-    $commandAST = $ast.FindAll({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $true)
+    $commandAST = $script.Ast.FindAll({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $true)
 
     if (-not $IncludeCallOperators) {
         $commandAST = $commandAST | Where-Object { $_.InvocationOperator -notin 'Ampersand', 'Dot' }
