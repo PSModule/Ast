@@ -4,32 +4,32 @@ Describe 'Core' {
     Context "Function: 'Get-ASTScript'" {
         It 'Get-ASTScript gets the script AST' {
             $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
-            $ast = Get-ASTScript -Path $path
-            $ast | Should -Not -BeNullOrEmpty
-            $ast | Should -BeOfType [System.Management.Automation.Language.ScriptBlockAst]
+            $script = Get-ASTScript -Path $path
+            $script | Should -Not -BeNullOrEmpty
+            $script.Ast | Should -BeOfType [System.Management.Automation.Language.ScriptBlockAst]
         }
     }
     Context "Function: 'Get-ASTFunction'" {
         It 'Get-ASTFunction gets the function AST' {
             $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
-            $ast = Get-ASTFunction -Path $path
-            $ast | Should -Not -BeNullOrEmpty
-            $ast | Should -BeOfType [System.Management.Automation.Language.FunctionDefinitionAst]
+            $function = Get-ASTFunction -Path $path
+            $function | Should -Not -BeNullOrEmpty
+            $function.Ast | Should -BeOfType [System.Management.Automation.Language.FunctionDefinitionAst]
         }
     }
     Context "Function: 'Get-ASTCommand'" {
         It 'Get-ASTCommand gets the command AST' {
             $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
-            $ast = Get-ASTCommand -Path $path
-            $ast | Should -Not -BeNullOrEmpty
-            $ast | Should -BeOfType [System.Management.Automation.Language.CommandAst]
+            $command = Get-ASTCommand -Path $path
+            $command | Should -Not -BeNullOrEmpty
+            $command.Ast | Should -BeOfType [System.Management.Automation.Language.CommandAst]
         }
     }
 }
 
 Describe 'Functions' {
     Context "Function: 'Get-ASTFunctionType'" {
-        It 'Get-ASTFunctionAlias gets the function alias' {
+        It 'Get-ASTFunctionType gets the function type' {
             $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
             $functionType = Get-ASTFunctionType -Path $path
             $functionType.Type | Should -Be 'Function'
