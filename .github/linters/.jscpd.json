@@ -4,7 +4,10 @@
         "consoleFull"
     ],
     "ignore": [
-        "**/tests/**"
+        "**/tests/**",
+        "**/src/functions/public/Functions/**",
+        "**/src/functions/public/Core/Get-ASTCommand.ps1",
+        "**/src/functions/public/Core/Get-ASTFunction.ps1"
     ],
     "absolute": true
 }
