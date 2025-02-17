@@ -11,13 +11,14 @@
     [Alias('Test', 'TestFunc')]
     [Alias('Test-Func')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSAvoidUsingCmdletAliases', '', Scope = 'Function',
-        Justification = 'This is a test :)'
+        'PSAvoidUsingCmdletAliases',
+        Justification = 'Want to see that ASTCommand actually can get aliases.'
     )]
     [CmdletBinding()]
     param (
         # Name of the person to greet.
         [Parameter(Mandatory)]
+        [Alias('Person')]
         [string] $Name
     )
     Write-Output "Hello, $Name!"
