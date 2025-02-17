@@ -53,7 +53,7 @@ Describe 'Functions' {
     }
 }
 
-Describe 'Line' {
+Describe 'Lines' {
     Context 'Function: Get-ASTLineComment' {
         It 'Get-ASTLineComment gets the line comment' {
             $line = '# This is a comment'
@@ -84,6 +84,18 @@ Describe 'Scripts' {
             $commands = Get-ASTScriptCommand -Path $path
             $commands | Should -Not -BeNullOrEmpty
             $commands | Should -BeOfType [pscustomobject]
+            $commands.Name | Should -Not -Contain 'ForEach-Object'
+            $commands.Name | Should -Not -Contain 'Get-Process'
+            $commands.Name | Should -Not -Contain 'ipmo'
+            $commands.Name | Should -Contain 'Register-ArgumentCompleter'
+            $commands.Name | Should -Not -Contain '.'
+            $commands.Name | Should -Not -Contain '&'
+        }
+        It 'Get-ASTScriptCommands gets the script commands (recursive)' {
+            $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
+            $commands = Get-ASTScriptCommand -Path $path -Recurse
+            $commands | Should -Not -BeNullOrEmpty
+            $commands | Should -BeOfType [pscustomobject]
             $commands.Name | Should -Contain 'ForEach-Object'
             $commands.Name | Should -Contain 'Get-Process'
             $commands.Name | Should -Contain 'ipmo'
@@ -94,6 +106,18 @@ Describe 'Scripts' {
         It 'Get-ASTScriptCommands gets the script commands with call operators' {
             $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
             $commands = Get-ASTScriptCommand -Path $path -IncludeCallOperators
+            $commands | Should -Not -BeNullOrEmpty
+            $commands | Should -BeOfType [pscustomobject]
+            $commands.Name | Should -Not -Contain 'ForEach-Object'
+            $commands.Name | Should -Not -Contain 'Get-Process'
+            $commands.Name | Should -Not -Contain 'ipmo'
+            $commands.Name | Should -Contain 'Register-ArgumentCompleter'
+            $commands.Name | Should -Not -Contain '.'
+            $commands.Name | Should -Not -Contain '&'
+        }
+        It 'Get-ASTScriptCommands gets the script commands with call operators (recursive)' {
+            $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
+            $commands = Get-ASTScriptCommand -Path $path -Recurse -IncludeCallOperators
             $commands | Should -Not -BeNullOrEmpty
             $commands | Should -BeOfType [pscustomobject]
             $commands.Name | Should -Contain 'ForEach-Object'

@@ -57,7 +57,11 @@
 
         # Search nested functions and script block expressions.
         [Parameter()]
-        [switch] $Recurse
+        [switch] $Recurse,
+
+        # Include call operators in the results, i.e. & and .
+        [Parameter()]
+        [switch] $IncludeCallOperators
     )
 
     begin {}
