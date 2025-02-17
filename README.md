@@ -25,7 +25,7 @@ Here is a list of example that are typical use cases for the module.
 This example shows how to get the function name from a script.
 
 ```powershell
-Get-FunctionName -Path 'Test-Me.ps1'
+Get-ASTFunctionName -Path 'Test-Me.ps1'
 Test-Me
 ```
 

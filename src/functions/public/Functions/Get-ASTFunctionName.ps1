@@ -1,4 +1,4 @@
-﻿function Get-FunctionName {
+﻿function Get-ASTFunctionName {
     <#
 
     #>

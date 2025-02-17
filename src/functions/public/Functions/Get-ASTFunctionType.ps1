@@ -1,4 +1,4 @@
-﻿function Get-FunctionType {
+﻿function Get-ASTFunctionType {
     <#
 
     #>
