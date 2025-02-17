@@ -1,6 +1,59 @@
 ﻿function Get-AstCommand {
     <#
+        .SYNOPSIS
+        Retrieves command AST (Abstract Syntax Tree) elements from a PowerShell script or AST object.
 
+        .DESCRIPTION
+        This function extracts and returns command AST elements from a specified PowerShell script file,
+        script content, or an existing AST object. The function supports multiple input methods, including
+        direct script text, file paths, or existing AST objects. It also provides an option to search nested
+        functions and script block expressions.
+
+        .EXAMPLE
+        Get-AstCommand -Path "C:\Scripts\MyScript.ps1"
+
+        Output:
+        ```powershell
+        Ast    : {@{Name=Get-Process; Extent=...}, @{Name=Write-Host; Extent=...}}
+        Tokens : {...}
+        Errors : {}
+        ```
+
+        Parses the specified script file and extracts command AST elements.
+
+        .EXAMPLE
+        Get-AstCommand -Script "Get-Process; Write-Host 'Hello'"
+
+        Output:
+        ```powershell
+        Ast    : {@{Name=Get-Process; Extent=...}, @{Name=Write-Host; Extent=...}}
+        Tokens : {...}
+        Errors : {}
+        ```
+
+        Parses the provided script content and extracts command AST elements.
+
+        .EXAMPLE
+        $ast = [System.Management.Automation.Language.Parser]::ParseInput("Get-Process", [ref]$null, [ref]$null)
+        Get-AstCommand -Ast $ast
+
+        Output:
+        ```powershell
+        Ast    : {@{Name=Get-Process; Extent=...}}
+        Tokens : {...}
+        Errors : {}
+        ```
+
+        Extracts command AST elements from a manually parsed AST object.
+
+        .OUTPUTS
+        PSCustomObject
+
+        .NOTES
+        Returns an object containing extracted AST elements, tokens, and errors.
+
+        .LINK
+        https://psmodule.io/Ast/Functions/Core/Get-AstCommand/
     #>
     [CmdletBinding(DefaultParameterSetName = 'Ast')]
     param (

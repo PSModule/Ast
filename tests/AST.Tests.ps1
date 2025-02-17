@@ -17,6 +17,14 @@ Describe 'Core' {
             $ast | Should -BeOfType [System.Management.Automation.Language.FunctionDefinitionAst]
         }
     }
+    Context "Function: 'Get-ASTCommand'" {
+        It 'Get-ASTCommand gets the command AST' {
+            $path = Join-Path $PSScriptRoot 'src\Test-Function.ps1'
+            $ast = Get-ASTCommand -Path $path
+            $ast | Should -Not -BeNullOrEmpty
+            $ast | Should -BeOfType [System.Management.Automation.Language.CommandAst]
+        }
+    }
 }
 
 Describe 'Functions' {

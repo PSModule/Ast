@@ -1,6 +1,58 @@
 ﻿function Get-AstFunction {
     <#
+        .SYNOPSIS
+        Retrieves function definitions from a PowerShell script or AST.
 
+        .DESCRIPTION
+        This function extracts function definitions from a given PowerShell script file, script content,
+        or an existing AST (Abstract Syntax Tree) object. It supports searching by function name
+        and can optionally search within nested functions and script block expressions.
+
+        .EXAMPLE
+        Get-AstFunction -Path "C:\Scripts\MyScript.ps1"
+
+        Output:
+        ```powershell
+        Ast    : {FunctionDefinitionAst, FunctionDefinitionAst}
+        Tokens : {...}
+        Errors : {}
+        ```
+
+        Retrieves function definitions from the specified script file.
+
+        .EXAMPLE
+        Get-AstFunction -Script "$scriptContent"
+
+        Output:
+        ```powershell
+        Ast    : {FunctionDefinitionAst}
+        Tokens : {...}
+        Errors : {}
+        ```
+
+        Parses and retrieves function definitions from the provided script content.
+
+        .EXAMPLE
+        $ast = Get-AstScript -Path "C:\Scripts\MyScript.ps1" | Select-Object -ExpandProperty Ast
+        Get-AstFunction -Ast $ast
+
+        Output:
+        ```powershell
+        Ast    : {FunctionDefinitionAst}
+        Tokens : {...}
+        Errors : {}
+        ```
+
+        Extracts function definitions from an existing AST object.
+
+        .OUTPUTS
+        PSCustomObject
+
+        .NOTES
+        Contains AST objects, tokenized script content, and parsing errors if any.
+
+        .LINK
+        https://psmodule.io/Ast/Functions/Get-AstFunction
     #>
     [CmdletBinding(DefaultParameterSetName = 'Ast')]
     param (
