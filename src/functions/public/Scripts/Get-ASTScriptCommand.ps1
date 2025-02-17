@@ -21,42 +21,85 @@
         .LINK
         https://psmodule.io/AST/Functions/Scripts/Get-ASTScriptCommand/
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Ast')]
     param (
+        # The name of the function to search for. Defaults to all functions ('*').
+        [Parameter()]
+        [string] $Name = '*',
+
         # The path to the PowerShell script file to be parsed.
-        [Parameter(Mandatory)]
-        [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
+        # Validate using Test-Path
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Path'
+        )]
         [string] $Path,
 
-        # Include call operators in the results, i.e. & and .
+        # The PowerShell script to be parsed.
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Script'
+        )]
+        [string] $Script,
+
+        # An existing AST object to search.
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'Ast'
+        )]
+        [System.Management.Automation.Language.Ast] $Ast,
+
+        # Search nested functions and script block expressions.
         [Parameter()]
-        [switch] $IncludeCallOperators
+        [switch] $Recurse
     )
 
-    # Extract function definitions
-    $script = Get-ASTScript -Path $Path
+    begin {}
 
-    # Gather CommandAsts
-    $commandAST = $script.Ast.FindAll({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $true)
-
-    if (-not $IncludeCallOperators) {
-        $commandAST = $commandAST | Where-Object { $_.InvocationOperator -notin 'Ampersand', 'Dot' }
-    }
-
-    $commandAST | ForEach-Object {
-        $invocationOperator = switch ($_.InvocationOperator) {
-            'Ampersand' { '&' }
-            'Dot' { '.' }
+    process {
+        $scriptAst = @()
+        switch ($PSCmdlet.ParameterSetName) {
+            'Path' {
+                $scriptAst += (Get-AstScript -Path $Path).Ast
+            }
+            'Script' {
+                $scriptAst += (Get-AstScript -Script $Script).Ast
+            }
+            'Ast' {
+                $scriptAst += $Ast
+            }
         }
-        $_.CommandElements[0].Extent | ForEach-Object {
-            [pscustomobject]@{
-                Name              = [string]::IsNullOrEmpty($invocationOperator) ? $_.Text : $invocationOperator
-                StartLineNumber   = $_.StartLineNumber
-                StartColumnNumber = $_.StartColumnNumber
-                EndLineNumber     = $_.EndLineNumber
-                EndColumnNumber   = $_.EndColumnNumber
-                File              = $_.File
+
+        # Gather CommandAsts
+        $commandAST = $scriptAst.FindAll({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $Recurse)
+
+        if (-not $IncludeCallOperators) {
+            $commandAST = $commandAST | Where-Object { $_.InvocationOperator -notin 'Ampersand', 'Dot' }
+        }
+
+        $commandAST | ForEach-Object {
+            $invocationOperator = switch ($_.InvocationOperator) {
+                'Ampersand' { '&' }
+                'Dot' { '.' }
+            }
+            $_.CommandElements[0].Extent | Where-Object { $_.Text -like $Name } | ForEach-Object {
+                [pscustomobject]@{
+                    Name              = [string]::IsNullOrEmpty($invocationOperator) ? $_.Text : $invocationOperator
+                    StartLineNumber   = $_.StartLineNumber
+                    StartColumnNumber = $_.StartColumnNumber
+                    EndLineNumber     = $_.EndLineNumber
+                    EndColumnNumber   = $_.EndColumnNumber
+                    File              = $_.File
+                }
             }
         }
     }
+
+    end {}
 }
