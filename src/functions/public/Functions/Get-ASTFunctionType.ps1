@@ -86,7 +86,7 @@
             }
         }
 
-        $functionAST | ForEach-Object {
+        $functionAST.Ast | ForEach-Object {
             $type = if ($_.IsWorkflow) {
                 'Workflow'
             } elseif ($_.IsConfiguration) {

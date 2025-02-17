@@ -18,6 +18,7 @@
     param (
         # Name of the person to greet.
         [Parameter(Mandatory)]
+        [Alias('Person')]
         [string] $Name
     )
     Write-Output "Hello, $Name!"

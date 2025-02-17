@@ -86,14 +86,12 @@
         }
 
         # Process each function and extract aliases
-        $functionAST | ForEach-Object {
+        $functionAST.Ast | ForEach-Object {
             $funcName = $_.Name
-            $funcAttributes = $_.Body.FindAll({ $args[0] -is [System.Management.Automation.Language.AttributeAst] }, $true)
-
-            # Filter only function-level alias attributes
-            $aliasAttr = $funcAttributes | Where-Object {
-                $_.TypeName.Name -eq 'Alias' -and $_.Parent -is [System.Management.Automation.Language.FunctionDefinitionAst]
+            $funcAttributes = $_.Body.FindAll({ $args[0] -is [System.Management.Automation.Language.AttributeAst] }, $true) | Where-Object {
+                $_.Parent -is [System.Management.Automation.Language.ParamBlockAst]
             }
+            $aliasAttr = $funcAttributes | Where-Object { $_.TypeName.Name -eq 'Alias' }
 
             if ($aliasAttr) {
                 $aliases = $aliasAttr.PositionalArguments | ForEach-Object { $_.ToString().Trim('"', "'") }

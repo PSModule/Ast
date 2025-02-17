@@ -95,7 +95,7 @@
         }
 
         # Process each function and extract the name
-        $functionAST | ForEach-Object {
+        $functionAST.Ast | ForEach-Object {
             $_.Name
         }
     }
