@@ -11,8 +11,8 @@
     [Alias('Test', 'TestFunc')]
     [Alias('Test-Func')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        'PSAvoidUsingWriteHost', # Keeping this disabled as it seems like an old issue. '', Scope = 'Function',
-        Justification = 'This is a test :)'
+        'PSAvoidUsingCmdletAliases',
+        Justification = 'Want to see that ASTCommand actually can get aliases.'
     )]
     [CmdletBinding()]
     param (
