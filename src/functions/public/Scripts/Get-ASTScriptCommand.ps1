@@ -1,4 +1,4 @@
-﻿function Get-ASTScriptCommand {
+﻿function Get-AstScriptCommand {
     <#
         .SYNOPSIS
         Retrieves the commands used within a specified PowerShell script.
@@ -9,17 +9,17 @@
         Returns details such as command name, position, and file reference.
 
         .EXAMPLE
-        Get-ASTScriptCommand -Path "C:\Scripts\example.ps1"
+        Get-AstScriptCommand -Path "C:\Scripts\example.ps1"
 
         Extracts and lists all commands found in the specified PowerShell script.
 
         .EXAMPLE
-        Get-ASTScriptCommand -Path "C:\Scripts\example.ps1" -IncludeCallOperators
+        Get-AstScriptCommand -Path "C:\Scripts\example.ps1" -IncludeCallOperators
 
         Extracts all commands, including those executed with call operators (& and .).
 
         .LINK
-        https://psmodule.io/AST/Functions/Scripts/Get-ASTScriptCommand/
+        https://psmodule.io/Ast/Functions/Scripts/Get-AstScriptCommand/
     #>
     [CmdletBinding(DefaultParameterSetName = 'Ast')]
     param (
@@ -46,7 +46,7 @@
         )]
         [string] $Script,
 
-        # An existing AST object to search.
+        # An existing Ast object to search.
         [Parameter(
             Mandatory,
             ValueFromPipeline,
@@ -81,13 +81,13 @@
         }
 
         # Gather CommandAsts
-        $commandAST = $scriptAst.FindAll({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $Recurse)
+        $commandAst = $scriptAst.FindAll({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $Recurse)
 
         if (-not $IncludeCallOperators) {
-            $commandAST = $commandAST | Where-Object { $_.InvocationOperator -notin 'Ampersand', 'Dot' }
+            $commandAst = $commandAst | Where-Object { $_.InvocationOperator -notin 'Ampersand', 'Dot' }
         }
 
-        $commandAST | ForEach-Object {
+        $commandAst | ForEach-Object {
             $invocationOperator = switch ($_.InvocationOperator) {
                 'Ampersand' { '&' }
                 'Dot' { '.' }

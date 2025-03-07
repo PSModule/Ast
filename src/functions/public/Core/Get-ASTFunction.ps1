@@ -1,11 +1,11 @@
 ﻿function Get-AstFunction {
     <#
         .SYNOPSIS
-        Retrieves function definitions from a PowerShell script or AST.
+        Retrieves function definitions from a PowerShell script or Ast.
 
         .DESCRIPTION
         This function extracts function definitions from a given PowerShell script file, script content,
-        or an existing AST (Abstract Syntax Tree) object. It supports searching by function name
+        or an existing Ast (Abstract Syntax Tree) object. It supports searching by function name
         and can optionally search within nested functions and script block expressions.
 
         .EXAMPLE
@@ -43,13 +43,13 @@
         Errors : {}
         ```
 
-        Extracts function definitions from an existing AST object.
+        Extracts function definitions from an existing Ast object.
 
         .OUTPUTS
         PSCustomObject
 
         .NOTES
-        Contains AST objects, tokenized script content, and parsing errors if any.
+        Contains Ast objects, tokenized script content, and parsing errors if any.
 
         .LINK
         https://psmodule.io/Ast/Functions/Core/Get-AstFunction
@@ -79,7 +79,7 @@
         )]
         [string] $Script,
 
-        # An existing AST object to search.
+        # An existing Ast object to search.
         [Parameter(
             Mandatory,
             ValueFromPipeline,
