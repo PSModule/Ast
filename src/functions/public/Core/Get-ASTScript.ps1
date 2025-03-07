@@ -1,10 +1,10 @@
 ﻿function Get-AstScript {
     <#
         .SYNOPSIS
-        Parses a PowerShell script or script file and returns its abstract syntax tree (AST).
+        Parses a PowerShell script or script file and returns its abstract syntax tree (Ast).
 
         .DESCRIPTION
-        The Get-AstScript function parses a PowerShell script or script file and returns its abstract syntax tree (AST),
+        The Get-AstScript function parses a PowerShell script or script file and returns its abstract syntax tree (Ast),
         along with tokens and errors encountered during parsing. This function can be used to analyze the structure
         of a script by specifying either the script content directly or the path to a script file.
 
@@ -18,7 +18,7 @@
         Errors : {Error1, Error2, ...}
         ```
 
-        Parses the PowerShell script located at "C:\\Scripts\\example.ps1" and returns its AST, tokens, and any parsing errors.
+        Parses the PowerShell script located at "C:\\Scripts\\example.ps1" and returns its Ast, tokens, and any parsing errors.
 
         .EXAMPLE
         Get-AstScript -Script "Write-Host 'Hello World'"
@@ -30,14 +30,14 @@
         Errors : {}
         ```
 
-        Parses the provided PowerShell script string and returns its AST, tokens, and any parsing errors.
+        Parses the provided PowerShell script string and returns its Ast, tokens, and any parsing errors.
 
         .OUTPUTS
         PSCustomObject
 
         .NOTES
         The returned custom object contains the following properties:
-        - `Ast` - [System.Management.Automation.Language.ScriptBlockAst]. The abstract syntax tree (AST) of the parsed script.
+        - `Ast` - [System.Management.Automation.Language.ScriptBlockAst]. The abstract syntax tree (Ast) of the parsed script.
         - `Tokens` - [System.Management.Automation.Language.Token[]]. The tokens generated during parsing.
         - `Errors` - [System.Management.Automation.Language.ParseError[]]. Any parsing errors encountered.
 

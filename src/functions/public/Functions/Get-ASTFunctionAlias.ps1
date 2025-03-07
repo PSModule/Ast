@@ -1,4 +1,4 @@
-﻿function Get-ASTFunctionAlias {
+﻿function Get-AstFunctionAlias {
     <#
         .SYNOPSIS
         Retrieves function aliases from a PowerShell script or file.
@@ -10,7 +10,7 @@
         within nested functions and script blocks.
 
         .EXAMPLE
-        Get-ASTFunctionAlias -Path "C:\Scripts\MyScript.ps1" -Name "Get-User"
+        Get-AstFunctionAlias -Path "C:\Scripts\MyScript.ps1" -Name "Get-User"
 
         Output:
         ```powershell
@@ -22,7 +22,7 @@
         Retrieves aliases assigned to the function `Get-User` within the specified script file.
 
         .EXAMPLE
-        Get-ASTFunctionAlias -Script $scriptContent -Recurse
+        Get-AstFunctionAlias -Script $scriptContent -Recurse
 
         Output:
         ```powershell
@@ -40,7 +40,7 @@
         An object containing the function name and its associated aliases.
 
         .LINK
-        https://psmodule.io/AST/Functions/Functions/Get-ASTFunctionAlias
+        https://psmodule.io/Ast/Functions/Functions/Get-AstFunctionAlias
     #>
     [CmdletBinding()]
     param (
@@ -78,15 +78,15 @@
     process {
         switch ($PSCmdlet.ParameterSetName) {
             'Path' {
-                $functionAST = Get-ASTFunction -Name $Name -Path $Path -Recurse:$Recurse
+                $functionAst = Get-AstFunction -Name $Name -Path $Path -Recurse:$Recurse
             }
             'Script' {
-                $functionAST = Get-ASTFunction -Name $Name -Script $Script -Recurse:$Recurse
+                $functionAst = Get-AstFunction -Name $Name -Script $Script -Recurse:$Recurse
             }
         }
 
         # Process each function and extract aliases
-        $functionAST.Ast | ForEach-Object {
+        $functionAst.Ast | ForEach-Object {
             $funcName = $_.Name
             $funcAttributes = $_.Body.FindAll({ $args[0] -is [System.Management.Automation.Language.AttributeAst] }, $true) | Where-Object {
                 $_.Parent -is [System.Management.Automation.Language.ParamBlockAst]

@@ -1,7 +1,7 @@
-﻿function Get-ASTFunctionType {
+﻿function Get-AstFunctionType {
     <#
         .SYNOPSIS
-        Retrieves the type of an abstract syntax tree (AST) function.
+        Retrieves the type of an abstract syntax tree (Ast) function.
 
         .DESCRIPTION
         Parses a PowerShell script file or script content to determine the type of function present.
@@ -9,7 +9,7 @@
         It supports searching for specific function names and can process nested functions if required.
 
         .EXAMPLE
-        Get-ASTFunctionType -Path "C:\Scripts\MyScript.ps1"
+        Get-AstFunctionType -Path "C:\Scripts\MyScript.ps1"
 
         Output:
         ```powershell
@@ -22,7 +22,7 @@
         Parses the specified script file and identifies function types.
 
         .EXAMPLE
-        Get-ASTFunctionType -Script "function Test { param() Write-Output 'Hello' }"
+        Get-AstFunctionType -Script "function Test { param() Write-Output 'Hello' }"
 
         Output:
         ```powershell
@@ -40,7 +40,7 @@
         Represents the function name and its determined type.
 
         .LINK
-        https://psmodule.io/AST/Functions/Functions/Get-ASTFunctionType/
+        https://psmodule.io/Ast/Functions/Functions/Get-AstFunctionType/
     #>
     [OutputType([pscustomobject])]
     [CmdletBinding()]
@@ -79,14 +79,14 @@
     process {
         switch ($PSCmdlet.ParameterSetName) {
             'Path' {
-                $functionAST = Get-ASTFunction -Name $Name -Path $Path -Recurse:$Recurse
+                $functionAst = Get-AstFunction -Name $Name -Path $Path -Recurse:$Recurse
             }
             'Script' {
-                $functionAST = Get-ASTFunction -Name $Name -Script $Script -Recurse:$Recurse
+                $functionAst = Get-AstFunction -Name $Name -Script $Script -Recurse:$Recurse
             }
         }
 
-        $functionAST.Ast | ForEach-Object {
+        $functionAst.Ast | ForEach-Object {
             $type = if ($_.IsWorkflow) {
                 'Workflow'
             } elseif ($_.IsConfiguration) {
