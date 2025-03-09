@@ -99,7 +99,7 @@
 
         # Input from pipeline that will be automatically detected as path or script
         [Parameter(
-            Mandatory = $false,
+            Mandatory,
             ValueFromPipeline,
             ParameterSetName = 'PipelineInput'
         )]
