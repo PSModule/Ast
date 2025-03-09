@@ -4,7 +4,6 @@
 .DESCRIPTION
     This filter demonstrates how filter functions work and how they can be parsed.
 #>
-[Alias('tf', 'testf')]
 filter Test-FilterFunction {
     $_ | ForEach-Object {
         # Process each item
@@ -34,6 +33,13 @@ filter Test-FilterFunction {
 
 # Add a helper function in the same file
 function Convert-InputObject {
+    <#
+        .SYNOPSIS
+        Short description
+
+        .DESCRIPTION
+        Long description
+    #>
     param(
         [Parameter(ValueFromPipeline)]
         $InputObject

@@ -1,10 +1,10 @@
-﻿<#
-.SYNOPSIS
-    Tests various parameter types for AST parsing.
-.DESCRIPTION
-    This function contains a variety of parameter types to test AST parsing capabilities.
-#>
-function Test-ParameterType {
+﻿function Test-ParameterType {
+    <#
+    .SYNOPSIS
+        Tests various parameter types for AST parsing.
+    .DESCRIPTION
+        This function contains a variety of parameter types to test AST parsing capabilities.
+    #>
     [CmdletBinding(DefaultParameterSetName = 'Standard')]
     [Alias('ParamTest')]
     param (

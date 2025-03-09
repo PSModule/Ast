@@ -1,10 +1,10 @@
-﻿<#
-.SYNOPSIS
-    A test function with multiple aliases.
-.DESCRIPTION
-    This function demonstrates how multiple aliases can be defined and extracted.
-#>
-function Test-MultipleAlias {
+﻿function Test-MultipleAlias {
+    <#
+    .SYNOPSIS
+        A test function with multiple aliases.
+    .DESCRIPTION
+        This function demonstrates how multiple aliases can be defined and extracted.
+    #>
     [CmdletBinding()]
     [Alias('tma', 'testalias', 'malias', 'Test-MA')]
     param (
