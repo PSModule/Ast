@@ -32,6 +32,16 @@
 
         Parses the provided PowerShell script string and returns its Ast, tokens, and any parsing errors.
 
+        .EXAMPLE
+        Get-AstScript -Path "C:\\Scripts" -Recurse
+
+        Parses all PowerShell script files in the "C:\\Scripts" directory and its subdirectories.
+
+        .EXAMPLE
+        Get-AstScript -Path @("C:\\Scripts\\example.ps1", "C:\\Scripts\\example2.ps1")
+
+        Parses multiple PowerShell script files and returns their Asts.
+
         .OUTPUTS
         PSCustomObject
 
@@ -47,16 +57,24 @@
     [outputType([System.Management.Automation.Language.ScriptBlockAst])]
     [CmdletBinding()]
     param (
-        # The path to the PowerShell script file to be parsed.
-        # Validate using Test-Path
+        # The path(s) to PowerShell script file(s) or folder(s) to be parsed.
         [Parameter(
             Mandatory,
             ValueFromPipeline,
             ValueFromPipelineByPropertyName,
             ParameterSetName = 'Path'
         )]
-        [ValidateScript({ Test-Path -Path $_ })]
-        [string] $Path,
+        [ValidateScript({
+                foreach ($p in $_) {
+                    if (-not (Test-Path -Path $p)) { return $false }
+                }
+                return $true
+            })]
+        [string[]] $Path,
+
+        # Process directories recursively
+        [Parameter(ParameterSetName = 'Path')]
+        [switch] $Recurse,
 
         # The PowerShell script to be parsed.
         [Parameter(
@@ -73,18 +91,44 @@
     process {
         $tokens = $null
         $errors = $null
+
         switch ($PSCmdlet.ParameterSetName) {
             'Path' {
-                $ast = [System.Management.Automation.Language.Parser]::ParseFile($Path, [ref]$tokens, [ref]$errors)
+                foreach ($p in $Path) {
+                    # Check if the path is a directory
+                    if (Test-Path -Path $p -PathType Container) {
+                        # Get all .ps1 files in the directory
+                        $files = Get-ChildItem -Path $p -Filter '*.ps1' -File -Recurse:$Recurse
+
+                        foreach ($file in $files) {
+                            $ast = [System.Management.Automation.Language.Parser]::ParseFile($file.FullName, [ref]$tokens, [ref]$errors)
+                            [pscustomobject]@{
+                                Path   = $file.FullName
+                                Ast    = $ast
+                                Tokens = $tokens
+                                Errors = $errors
+                            }
+                        }
+                    } else {
+                        # Path is a file
+                        $ast = [System.Management.Automation.Language.Parser]::ParseFile($p, [ref]$tokens, [ref]$errors)
+                        [pscustomobject]@{
+                            Path   = $p
+                            Ast    = $ast
+                            Tokens = $tokens
+                            Errors = $errors
+                        }
+                    }
+                }
             }
             'Script' {
                 $ast = [System.Management.Automation.Language.Parser]::ParseInput($Script, [ref]$tokens, [ref]$errors)
+                [pscustomobject]@{
+                    Ast    = $ast
+                    Tokens = $tokens
+                    Errors = $errors
+                }
             }
-        }
-        [pscustomobject]@{
-            Ast    = $ast
-            Tokens = $tokens
-            Errors = $errors
         }
     }
 
