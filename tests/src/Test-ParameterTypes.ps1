@@ -4,7 +4,7 @@
 .DESCRIPTION
     This function contains a variety of parameter types to test AST parsing capabilities.
 #>
-function Test-ParameterTypes {
+function Test-ParameterType {
     [CmdletBinding(DefaultParameterSetName = 'Standard')]
     [Alias('ParamTest')]
     param (
@@ -34,6 +34,12 @@ function Test-ParameterTypes {
 
     begin {
         $results = [System.Collections.ArrayList]::new()
+        Write-Verbose "StringParam: $StringParam"
+        Write-Verbose "IntParam: $IntParam"
+        Write-Verbose "DateParam: $DateParam"
+        Write-Verbose "ChoiceParam: $ChoiceParam"
+        Write-Verbose "PathParam: $PathParam"
+        Write-Verbose "Config: $($Config | Out-String)"
     }
 
     process {

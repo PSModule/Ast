@@ -4,7 +4,7 @@
 .DESCRIPTION
     This function demonstrates how multiple aliases can be defined and extracted.
 #>
-function Test-MultipleAliases {
+function Test-MultipleAlias {
     [CmdletBinding()]
     [Alias('tma', 'testalias', 'malias', 'Test-MA')]
     param (
@@ -20,5 +20,6 @@ function Test-MultipleAliases {
 # Register custom completer
 Register-ArgumentCompleter -CommandName Test-MultipleAliases -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete)
+    $null = $commandName, $parameterName, $wordToComplete
     @('Option1', 'Option2', 'Option3') | Where-Object { $_ -like "$wordToComplete*" }
 }

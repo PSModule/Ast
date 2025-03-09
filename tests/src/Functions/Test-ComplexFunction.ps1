@@ -5,19 +5,20 @@
     This function demonstrates complex PowerShell structures for AST testing.
 #>
 function Test-ComplexFunction {
+    [OutputType([System.Object[]])]
     [CmdletBinding()]
     [Alias('ComplexTest', 'Test-Complex')]
     param (
         [Parameter(Mandatory)]
         [string]$InputValue,
 
-        [switch]$Debug
+        [switch]$DebugTest
     )
 
     begin {
         # Comments should be parsed correctly
         $results = @()
-        if ($Debug) {
+        if ($DebugTest) {
             Write-Verbose 'Debug mode enabled'
         }
     }
