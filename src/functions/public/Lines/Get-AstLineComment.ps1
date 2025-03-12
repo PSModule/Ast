@@ -1,4 +1,4 @@
-﻿filter Get-ASTLineComment {
+﻿filter Get-AstLineComment {
     <#
         .SYNOPSIS
         Extracts comment tokens from a given line of PowerShell code.
@@ -9,7 +9,7 @@
         the specified kind, defaulting to 'Comment'.
 
         .EXAMPLE
-        "# This is a comment" | Get-ASTLineComment
+        "# This is a comment" | Get-AstLineComment
 
         Output:
         ```powershell
@@ -26,7 +26,7 @@
         An array of tokens representing comments extracted from the input line.
 
         .LINK
-        https://psmodule.io/AST/Functions/Lines/Get-ASTLineComment/
+        https://psmodule.io/Ast/Functions/Lines/Get-AstLineComment/
     #>
     [OutputType([System.Management.Automation.Language.Token[]])]
     [CmdletBinding()]

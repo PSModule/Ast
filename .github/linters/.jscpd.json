@@ -5,9 +5,7 @@
     ],
     "ignore": [
         "**/tests/**",
-        "**/src/functions/public/Functions/**",
-        "**/src/functions/public/Core/Get-ASTCommand.ps1",
-        "**/src/functions/public/Core/Get-ASTFunction.ps1"
+        "**/src/**"
     ],
     "absolute": true
 }
