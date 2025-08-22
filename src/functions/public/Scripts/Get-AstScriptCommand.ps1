@@ -94,7 +94,7 @@
             }
             $_.CommandElements[0].Extent | Where-Object { $_.Text -like $Name } | ForEach-Object {
                 [pscustomobject]@{
-                    Name              = [string]::IsNullOrEmpty($invocationOperator) ? $_.Text : $invocationOperator
+                    Name              = if ([string]::IsNullOrEmpty($invocationOperator)) { $_.Text } else { $invocationOperator }
                     StartLineNumber   = $_.StartLineNumber
                     StartColumnNumber = $_.StartColumnNumber
                     EndLineNumber     = $_.EndLineNumber
