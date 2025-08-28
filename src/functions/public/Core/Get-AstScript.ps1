@@ -32,6 +32,31 @@
 
         Parses the provided PowerShell script string and returns its Ast, tokens, and any parsing errors.
 
+        .EXAMPLE
+        Get-AstScript -Path "C:\\Scripts" -Recurse
+
+        Parses all PowerShell script files in the "C:\\Scripts" directory and its subdirectories.
+
+        .EXAMPLE
+        Get-AstScript -Path @("C:\\Scripts\\example.ps1", "C:\\Scripts\\example2.ps1")
+
+        Parses multiple PowerShell script files and returns their Asts.
+
+        .EXAMPLE
+        Get-AstScript -Script @("Write-Host 'Hello'", "Write-Host 'World'")
+
+        Parses multiple PowerShell script strings and returns their Asts.
+
+        .EXAMPLE
+        "Write-Host 'Hello'", "Write-Host 'World'" | Get-AstScript
+
+        Parses multiple PowerShell script strings from the pipeline and returns their Asts.
+
+        .EXAMPLE
+        Get-ChildItem -Path "C:\\Scripts" -Filter "*.ps1" | Get-AstScript
+
+        Parses all PowerShell script files returned by Get-ChildItem.
+
         .OUTPUTS
         PSCustomObject
 
@@ -45,46 +70,83 @@
         https://psmodule.io/Ast/Functions/Core/Get-AstScript/
     #>
     [outputType([System.Management.Automation.Language.ScriptBlockAst])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PipelineInput')]
     param (
-        # The path to the PowerShell script file to be parsed.
-        # Validate using Test-Path
+        # The path(s) to PowerShell script file(s) or folder(s) to be parsed.
         [Parameter(
             Mandatory,
-            ValueFromPipeline,
-            ValueFromPipelineByPropertyName,
             ParameterSetName = 'Path'
         )]
-        [ValidateScript({ Test-Path -Path $_ })]
-        [string] $Path,
+        [ValidateScript({
+                foreach ($p in $_) {
+                    if (-not (Test-Path -Path $p)) { return $false }
+                }
+                return $true
+            })]
+        [string[]] $Path,
 
-        # The PowerShell script to be parsed.
+        # Process directories recursively
+        [Parameter(ParameterSetName = 'Path')]
+        [Parameter(ParameterSetName = 'PipelineInput')]
+        [switch] $Recurse,
+
+        # The PowerShell script(s) to be parsed.
+        [Parameter(
+            Mandatory,
+            ParameterSetName = 'Script'
+        )]
+        [string[]] $Script,
+
+        # Input from pipeline that will be automatically detected as path or script
         [Parameter(
             Mandatory,
             ValueFromPipeline,
-            ValueFromPipelineByPropertyName,
-            ParameterSetName = 'Script'
+            ParameterSetName = 'PipelineInput'
         )]
-        [string] $Script
+        [string[]] $InputObject
     )
 
     begin {}
 
     process {
-        $tokens = $null
-        $errors = $null
         switch ($PSCmdlet.ParameterSetName) {
             'Path' {
-                $ast = [System.Management.Automation.Language.Parser]::ParseFile($Path, [ref]$tokens, [ref]$errors)
+                foreach ($p in $Path) {
+                    # Check if the path is a directory
+                    if (Test-Path -Path $p -PathType Container) {
+                        Read-AstDirectory -DirPath $p -RecurseDir $Recurse
+                    } else {
+                        # Path is a file
+                        Read-AstScriptFile -FilePath $p
+                    }
+                }
             }
             'Script' {
-                $ast = [System.Management.Automation.Language.Parser]::ParseInput($Script, [ref]$tokens, [ref]$errors)
+                foreach ($scriptContent in $Script) {
+                    Read-AstScriptContent -ScriptContent $scriptContent
+                }
             }
-        }
-        [pscustomobject]@{
-            Ast    = $ast
-            Tokens = $tokens
-            Errors = $errors
+            'PipelineInput' {
+                # Default parameter set for handling pipeline input
+                if ($null -ne $InputObject) {
+                    foreach ($item in $InputObject) {
+                        # Check if input is a file path or directory
+                        if (Test-Path -Path $item -ErrorAction SilentlyContinue) {
+                            if (Test-Path -Path $item -PathType Container) {
+                                Read-AstDirectory -DirPath $item -RecurseDir $Recurse
+                            } else {
+                                Read-AstScriptFile -FilePath $item
+                            }
+                        } elseif ($PSBoundParameters.ContainsKey('InputObject') -and
+                            $InputObject.PSObject.Properties.Name -contains 'FullName' -and
+                               (Test-Path -Path $InputObject.FullName -ErrorAction SilentlyContinue)) {
+                            Read-AstScriptFile -FilePath $InputObject.FullName
+                        } else {
+                            Read-AstScriptContent -ScriptContent $item
+                        }
+                    }
+                }
+            }
         }
     }
 
