@@ -44,7 +44,7 @@
         .OUTPUTS
         System.String
 
-        Description is here?
+        The names of functions found in the PowerShell script.
 
         .NOTES
         The name of each function found in the PowerShell script.
@@ -52,7 +52,6 @@
         .LINK
         https://psmodule.io/Ast/Functions/Functions/Get-AstFunctionName/
     #>
-
     [CmdletBinding()]
     param (
         # The name of the command to search for. Defaults to all commands ('*').
