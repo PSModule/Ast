@@ -1,4 +1,4 @@
-# AST
+# Ast
 
 A PowerShell module for using the Abstract Syntax Tree (AST) on any PowerShell code.
 
@@ -12,8 +12,8 @@ This uses the following external resources:
 To install the module from the PowerShell Gallery, you can use the following command:
 
 ```powershell
-Install-PSResource -Name AST
-Import-Module -Name AST
+Install-PSResource -Name Ast
+Import-Module -Name Ast
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ Here is a list of example that are typical use cases for the module.
 This example shows how to get the function name from a script.
 
 ```powershell
-Get-ASTFunctionName -Path 'Test-Me.ps1'
+Get-AstFunctionName -Path 'Test-Me.ps1'
 Test-Me
 ```
 
