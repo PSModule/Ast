@@ -12,7 +12,7 @@
     [Alias('Test-Func')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         'PSAvoidUsingCmdletAliases',
-        Justification = 'Want to see that ASTCommand actually can get aliases.'
+        Justification = 'Want to see that AstCommand actually can get aliases.'
     )]
     [CmdletBinding()]
     param (
