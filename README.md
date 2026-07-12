@@ -15,8 +15,8 @@ Import-Module -Name Ast
 
 ## Usage
 
-The commands accept a file path (`-Path`), inline script content (`-Script`), or an existing AST object (`-Ast`), and
-default to matching everything so you can narrow the results with `-Name`.
+The commands accept a file path (`-Path`) or inline script content (`-Script`), and default to matching everything so
+you can narrow the results with `-Name`.
 
 ### Example: List the functions defined in a script
 
